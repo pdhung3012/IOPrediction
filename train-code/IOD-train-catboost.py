@@ -6,13 +6,14 @@
 # University. All rights reserved.
 
 import time
-file_tot_performace_tagged="/global/cfs/projectdirs/m2621/dbin/Cori_archive_19_20_21_22_un_taz_parsered_tagged_for_training-v1.csv"
-
+file_tot_performace_tagged="/home/hungphd/git/data_aiio/sample_train.csv"
+import tensorflow as tf
+print(tf.__version__)
 
 time_str=time.strftime("%Y%m%d-%H%M%S")
 
-plot_result_file_name="/global/homes/d/dbin/IODiagnoser/io-ai-model-catboost-sparse-learning-curve-"+time_str+".pdf"
-model_save_file_name="/global/cfs/cdirs/m2621/dbin/io-ai-model-catboost-sparse-"+time_str+".joblib"
+plot_result_file_name="/home/hungphd/git/data_aiio/results/catboost/io-ai-model-catboost-sparse-learning-curve-"+time_str+".pdf"
+model_save_file_name="/home/hungphd/git/data_aiio/results/catboost/"+time_str+".joblib"
 
 
 print("plot_result_file_name =", plot_result_file_name)

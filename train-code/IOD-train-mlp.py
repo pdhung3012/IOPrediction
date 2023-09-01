@@ -12,11 +12,11 @@
 # any required approvals from the U.S. Dept. of Energy) and Ohio State
 # University. All rights reserved.
 
-file_tot_performace_tagged="/global/cfs/projectdirs/m2621/dbin/Cori_archive_19_20_21_22_un_taz_parsered_tagged_for_training-v1.csv"
+file_tot_performace_tagged="/home/hungphd/git/data_aiio/sample_train.csv"
 
-plot_result_of="/global/homes/d/dbin/IODiagnoser/MLP_learning_curve.pdf"
+plot_result_of="/home/hungphd/git/data_aiio/results/mlp/MLP_learning_curve.pdf"
 
-model_save_file="/global/cfs/cdirs/m2621/dbin/io-ai-model-mlp-sparse-"
+model_save_file="/home/hungphd/git/data_aiio/results/mlp/io-ai-model-mlp-sparse-"
 
 
 is_kflod_test_flag=False
@@ -54,7 +54,8 @@ from multiscorer import MultiScorer
 import scipy.sparse
 import time
 
-
+import tensorflow as tf
+print(tf.__version__)
 # load the train dataset
 dataset = loadtxt(file_tot_performace_tagged, delimiter=',', skiprows=1)
 # split into input (X) and output (y) variables
