@@ -13,10 +13,12 @@
 # University. All rights reserved.
 
 file_tot_performace_tagged="/home/hungphd/git/data_aiio/sample_train.csv"
+fopResult='/home/hungphd/git/data_aiio/results/mlp/'
+from utils import *
+createDirIfNotExist(fopResult)
+plot_result_of=fopResult+"MLP_learning_curve.pdf"
 
-plot_result_of="/home/hungphd/git/data_aiio/results/mlp/MLP_learning_curve.pdf"
-
-model_save_file="/home/hungphd/git/data_aiio/results/mlp/io-ai-model-mlp-sparse-"
+model_save_file=fopResult+"io-ai-model-mlp-sparse-"
 
 
 is_kflod_test_flag=False
@@ -101,7 +103,7 @@ if is_kflod_test_flag:
     cross_val_score(model, X, Y, cv=kfold, scoring=scorer)
     results = scorer.get_results()                                       # Get a dict of lists containing the scores for each metric
     for metric in results.keys():                                        # Iterate and use the results
-      print("%s: %.3f" % (metric, average(results[metric])))
+      print("%s: %.3f" % (metric, mean(results[metric])))
 else:
     model=baseline_model()
     #https://machinelearningmastery.com/tune-xgboost-performance-with-learning-curves/
@@ -109,7 +111,7 @@ else:
     print("X_train.type=", type(X_train))
     print("X_train.shape=", X_train.shape)
     # fit the model
-    results=model.fit(X_train, y_train, validation_data=(X_test, y_test), epochs=10000, batch_size=256, verbose=1)
+    results=model.fit(X_train, y_train, validation_data=(X_test, y_test), epochs=1, batch_size=256, verbose=1)
     pyplot.plot(results.history['loss'])
     #pyplot.legend()
     pyplot.xlabel('Iteration')
