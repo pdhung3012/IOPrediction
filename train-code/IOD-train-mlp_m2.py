@@ -12,17 +12,17 @@
 # any required approvals from the U.S. Dept. of Energy) and Ohio State
 # University. All rights reserved.
 
-file_tot_performace_tagged="/home/hungphd/media/aiio/data/sample_train.csv"
-fopResult='/home/hungphd/media/aiio/results/mlp/'
+file_tot_performace_tagged = "/home/hungphd/git/data_aiio/sample_train.csv"
+fopResult = '/home/hungphd/git/data_aiio/results/mlp/'
 from utils import *
+
 createDirIfNotExist(fopResult)
-plot_result_of=fopResult+ "MLP_learning_curve.pdf"
+plot_result_of = fopResult + "MLP_learning_curve.pdf"
 
-model_save_file=fopResult+"io-ai-model-mlp-sparse-"
+model_save_file = fopResult + "io-ai-model-mlp-sparse-"
 
-
-is_kflod_test_flag=False
-kflod_n_splits=2
+is_kflod_test_flag = False
+kflod_n_splits = 2
 
 ##file_tot_performace_tagged="/global/cscratch1/sd/dbin/2019-01-total-tagged.csv"
 
@@ -51,80 +51,78 @@ from tensorflow.keras.layers import Dropout
 from keras.layers import BatchNormalization
 import joblib
 from multiscorer import MultiScorer
-import torch
 
 import scipy.sparse
 import time
 
 import tensorflow as tf
+
 print(tf.__version__)
-print('cuda avail {}'.format(torch.cuda.is_available()))
 # load the train dataset
 dataset = loadtxt(file_tot_performace_tagged, delimiter=',', skiprows=1)
 # split into input (X) and output (y) variables
 print(dataset.shape)
 n_dims = dataset.shape[1]
-X = dataset[:,0:n_dims-1]
-Y = dataset[:,n_dims-1]
+X = dataset[:, 0:n_dims - 1]
+Y = dataset[:, n_dims - 1]
 print("max(Y) =", max(Y), ", min(Y) =", min(Y))
 
-X=scipy.sparse.csr_matrix(X)
+X = scipy.sparse.csr_matrix(X)
 
-
-input_dim_size = n_dims -1
+input_dim_size = n_dims - 1
 print("input_dim_size = ", input_dim_size)
 
 
 def rmse(y_true, y_pred):
-    return backend.sqrt(backend.mean(backend.square(y_pred - y_true), axis=-1)) 
-    
+    return backend.sqrt(backend.mean(backend.square(y_pred - y_true), axis=-1))
+
+
 def baseline_model():
     # create model
     model = Sequential()
-    model.add(Dense(input_dim_size*2, input_shape=(input_dim_size,), kernel_initializer='normal', activation='relu'))
-    for nus in range(input_dim_size*2-1, 0, -20):
-        model.add(Dense(nus, kernel_initializer='normal', activation='relu')) 
+    model.add(Dense(input_dim_size * 2, input_shape=(input_dim_size,), kernel_initializer='normal', activation='relu'))
+    for nus in range(input_dim_size * 2 - 1, 0, -20):
+        model.add(Dense(nus, kernel_initializer='normal', activation='relu'))
         model.add(BatchNormalization())
         model.add(Dropout(0.5))
     model.add(Dense(1, kernel_initializer='normal'))
-    #opt = keras.optimizers.Adam()
+    # opt = keras.optimizers.Adam()
     model.compile(loss='mean_squared_error', optimizer='adam')
-    #print(model.summary())
+    # print(model.summary())
     return model
 
 
-
 if is_kflod_test_flag:
-    model=KerasRegressor(model=baseline_model, epochs=100, batch_size=128, verbose=1)
+    model = KerasRegressor(model=baseline_model, epochs=100, batch_size=128, verbose=1)
     kfold = KFold(n_splits=kflod_n_splits)
-    scorer = MultiScorer({                                               # Create a MultiScorer instance
-      'rmse': (mean_squared_error, {'squared': False}),
-      'r2': (r2_score, {})               # Param 'average' will be passed to precision_score as kwarg 
+    scorer = MultiScorer({  # Create a MultiScorer instance
+        'rmse': (mean_squared_error, {'squared': False}),
+        'r2': (r2_score, {})  # Param 'average' will be passed to precision_score as kwarg
     })
     cross_val_score(model, X, Y, cv=kfold, scoring=scorer)
-    results = scorer.get_results()                                       # Get a dict of lists containing the scores for each metric
-    for metric in results.keys():                                        # Iterate and use the results
-      print("%s: %.3f" % (metric, mean(results[metric])))
+    results = scorer.get_results()  # Get a dict of lists containing the scores for each metric
+    for metric in results.keys():  # Iterate and use the results
+        print("%s: %.3f" % (metric, mean(results[metric])))
 else:
-    model=baseline_model()
-    #https://machinelearningmastery.com/tune-xgboost-performance-with-learning-curves/
+    model = baseline_model()
+    # https://machinelearningmastery.com/tune-xgboost-performance-with-learning-curves/
     X_train, X_test, y_train, y_test = train_test_split(X, Y, random_state=1)
     print("X_train.type=", type(X_train))
     print("X_train.shape=", X_train.shape)
     # fit the model
-    results=model.fit(X_train, y_train, validation_data=(X_test, y_test), epochs=1, batch_size=256, verbose=1)
+    results = model.fit(X_train, y_train, validation_data=(X_test, y_test), epochs=1, batch_size=256, verbose=1)
     pyplot.plot(results.history['loss'])
-    #pyplot.legend()
+    # pyplot.legend()
     pyplot.xlabel('Iteration')
     pyplot.ylabel('loss')
-    pyplot.savefig(plot_result_of)  
+    pyplot.savefig(plot_result_of)
     pyplot.show()
-    
+
     yhat = model.predict(X_test)
     rmse_score = mean_squared_error(y_test, yhat, squared=False)
     print('rmse: %.3f' % rmse_score)
-    #joblib.dump(model, model_save_file) 
-    model_save_file_name=model_save_file+time.strftime("%Y%m%d-%H%M%S")+".joblib"
-    joblib.dump(model, model_save_file_name) 
+    # joblib.dump(model, model_save_file)
+    model_save_file_name = model_save_file + time.strftime("%Y%m%d-%H%M%S") + ".joblib"
+    joblib.dump(model, model_save_file_name)
     print(model_save_file_name)
-   
+
