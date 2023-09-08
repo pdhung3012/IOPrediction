@@ -2,15 +2,17 @@
 # through Lawrence Berkeley National Laboratory (subject to receipt of
 # any required approvals from the U.S. Dept. of Energy) and Ohio State
 # University. All rights reserved.
-
+from utils import *
 import time
-file_tot_performace_tagged="/global/cfs/projectdirs/m2621/dbin/Cori_archive_19_20_21_22_un_taz_parsered_tagged_for_training-v1.csv"
+file_tot_performace_tagged="/home/hungphd/media/aiio/data/sample_train.csv"
 
 
 time_str=time.strftime("%Y%m%d-%H%M%S")
+fopResult='/home/hungphd/git/data_aiio/results/lightGBM/'
+createDirIfNotExist(fopResult)
 
-plot_result_file_name="/global/homes/d/dbin/IODiagnoser/io-ai-model-lightgbm-sparse-learning-curve-"+time_str+".pdf"
-model_save_file_name="/global/cfs/cdirs/m2621/dbin/io-ai-model-lightgbm-sparse-"+time_str+".joblib"
+plot_result_file_name=fopResult+"io-ai-model-lightgbm-sparse-learning-curve-"+time_str+".pdf"
+model_save_file_name=fopResult+"io-ai-model-lightgbm-sparse-"+time_str+".joblib"
 
 
 print("plot_result_file_name =", plot_result_file_name)

@@ -6,14 +6,17 @@
 # University. All rights reserved.
 
 import time
-file_tot_performace_tagged="/home/hungphd/git/data_aiio/sample_train.csv"
+file_tot_performace_tagged="/home/hungphd/media/aiio/data/sample_train.csv"
 import tensorflow as tf
 print(tf.__version__)
 
 time_str=time.strftime("%Y%m%d-%H%M%S")
+fopResult='/home/hungphd/media/aiio/results/catboost/'
+from utils import *
+createDirIfNotExist(fopResult)
 
-plot_result_file_name="/home/hungphd/git/data_aiio/results/catboost/io-ai-model-catboost-sparse-learning-curve-"+time_str+".pdf"
-model_save_file_name="/home/hungphd/git/data_aiio/results/catboost/"+time_str+".joblib"
+plot_result_file_name=fopResult+"/io-ai-model-catboost-sparse-learning-curve-"+time_str+".pdf"
+model_save_file_name=fopResult+time_str+".joblib"
 
 
 print("plot_result_file_name =", plot_result_file_name)
