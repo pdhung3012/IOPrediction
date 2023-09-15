@@ -1,0 +1,117 @@
+
+  <!DOCTYPE html>
+  <html lang="en">
+  <body>
+  <script src="https://unpkg.com/gojs@2.2.17/release/go.js"></script>
+  <p>
+    This is a minimalist HTML and JavaScript skeleton of the GoJS Sample
+    <a href="https://gojs.net/latest/samples/parseTree.html">parseTree.html</a>. It was automatically generated from a button on the sample page,
+    and does not contain the full HTML. It is intended as a starting point to adapt for your own usage.
+    For many samples, you may need to inspect the
+    <a href="https://github.com/NorthwoodsSoftware/GoJS/blob/master/samples/parseTree.html">full source on Github</a>
+    and copy other files or scripts.
+  </p>
+  <div id="allSampleContent" class="p-4 w-full">
+    <script id="code">
+    function init() {
+
+      // Since 2.2 you can also author concise templates with method chaining instead of GraphObject.make
+      // For details, see https://gojs.net/latest/intro/buildingObjects.html
+      const $ = go.GraphObject.make;  // for conciseness in defining templates
+
+      myDiagram =
+        $(go.Diagram, "myDiagramDiv",
+          {
+            allowCopy: false,
+            allowDelete: false,
+            allowMove: false,
+            initialAutoScale: go.Diagram.Uniform,
+            layout:
+              $(FlatTreeLayout,  // custom Layout, defined below
+                {
+                  angle: 90,
+                  compaction: go.TreeLayout.CompactionNone
+                }),
+            "undoManager.isEnabled": true
+          });
+
+      myDiagram.nodeTemplate =
+        $(go.Node, "Vertical",
+          { selectionObjectName: "BODY" },
+          $(go.Panel, "Auto", { name: "BODY" },
+            $(go.Shape, "RoundedRectangle",
+              new go.Binding("fill"),
+              new go.Binding("stroke")),
+            $(go.TextBlock,
+              { font: "bold 12pt Arial, sans-serif", margin: new go.Margin(4, 2, 2, 2) },
+              new go.Binding("text"))
+          ),
+          $(go.Panel,  // this is underneath the "BODY"
+            { height: 17 },  // always this height, even if the TreeExpanderButton is not visible
+            $("TreeExpanderButton")
+          )
+        );
+
+      myDiagram.linkTemplate =
+        $(go.Link,
+          $(go.Shape, { strokeWidth: 1.5 }));
+
+      // set up the nodeDataArray, describing each part of the sentence
+      var nodeDataArray = [{'text': 'jobId-1', 'fill': '#e6f3ff', 'key': 1}, {'text': 'POSIX', 'fill': '#e6f3ff', 'key': 2, 'parent': 1}, {'text': 'id', 'fill': '#e6f3ff', 'key': 3, 'parent': 2}, {'text': '10691518514323380224', 'fill': '#99ffbb', 'key': 4, 'parent': 3}, {'text': 'POSIX_OPENS', 'fill': '#e6f3ff', 'key': 5, 'parent': 2}, {'text': '1025', 'fill': '#99ffbb', 'key': 6, 'parent': 5}, {'text': 'POSIX_WRITES', 'fill': '#e6f3ff', 'key': 7, 'parent': 2}, {'text': '470117190', 'fill': '#99ffbb', 'key': 8, 'parent': 7}, {'text': 'POSIX_SEEKS', 'fill': '#e6f3ff', 'key': 9, 'parent': 2}, {'text': '14385', 'fill': '#99ffbb', 'key': 10, 'parent': 9}, {'text': 'POSIX_STATS', 'fill': '#e6f3ff', 'key': 11, 'parent': 2}, {'text': '1', 'fill': '#99ffbb', 'key': 12, 'parent': 11}, {'text': 'POSIX_MMAPS', 'fill': '#e6f3ff', 'key': 13, 'parent': 2}, {'text': '-1', 'fill': '#99ffbb', 'key': 14, 'parent': 13}, {'text': 'POSIX_BYTES_WRITTEN', 'fill': '#e6f3ff', 'key': 15, 'parent': 2}, {'text': '687198965696', 'fill': '#99ffbb', 'key': 16, 'parent': 15}, {'text': 'POSIX_MAX_BYTE_WRITTEN', 'fill': '#e6f3ff', 'key': 17, 'parent': 2}, {'text': '343601581919', 'fill': '#99ffbb', 'key': 18, 'parent': 17}, {'text': 'POSIX_CONSEC_WRITES', 'fill': '#e6f3ff', 'key': 19, 'parent': 2}, {'text': '470102808', 'fill': '#99ffbb', 'key': 20, 'parent': 19}, {'text': 'POSIX_SEQ_WRITES', 'fill': '#e6f3ff', 'key': 21, 'parent': 2}, {'text': '470117178', 'fill': '#99ffbb', 'key': 22, 'parent': 21}, {'text': 'POSIX_MEM_ALIGNMENT', 'fill': '#e6f3ff', 'key': 23, 'parent': 2}, {'text': '8', 'fill': '#99ffbb', 'key': 24, 'parent': 23}, {'text': 'POSIX_FILE_NOT_ALIGNED', 'fill': '#e6f3ff', 'key': 25, 'parent': 2}, {'text': '469789504', 'fill': '#99ffbb', 'key': 26, 'parent': 25}, {'text': 'POSIX_FILE_ALIGNMENT', 'fill': '#e6f3ff', 'key': 27, 'parent': 2}, {'text': '1048576', 'fill': '#99ffbb', 'key': 28, 'parent': 27}, {'text': 'POSIX_MAX_WRITE_TIME_SIZE', 'fill': '#e6f3ff', 'key': 29, 'parent': 2}, {'text': '4194304', 'fill': '#99ffbb', 'key': 30, 'parent': 29}, {'text': 'POSIX_SIZE_WRITE_0_100', 'fill': '#e6f3ff', 'key': 31, 'parent': 2}, {'text': '1', 'fill': '#99ffbb', 'key': 32, 'parent': 31}, {'text': 'POSIX_SIZE_WRITE_100_1K', 'fill': '#e6f3ff', 'key': 33, 'parent': 2}, {'text': '469762054', 'fill': '#99ffbb', 'key': 34, 'parent': 33}, {'text': 'POSIX_SIZE_WRITE_1K_10K', 'fill': '#e6f3ff', 'key': 35, 'parent': 2}, {'text': '1466', 'fill': '#99ffbb', 'key': 36, 'parent': 35}, {'text': 'POSIX_SIZE_WRITE_10K_100K', 'fill': '#e6f3ff', 'key': 37, 'parent': 2}, {'text': '242', 'fill': '#99ffbb', 'key': 38, 'parent': 37}, {'text': 'POSIX_SIZE_WRITE_100K_1M', 'fill': '#e6f3ff', 'key': 39, 'parent': 2}, {'text': '328851', 'fill': '#99ffbb', 'key': 40, 'parent': 39}, {'text': 'POSIX_SIZE_WRITE_1M_4M', 'fill': '#e6f3ff', 'key': 41, 'parent': 2}, {'text': '24576', 'fill': '#99ffbb', 'key': 42, 'parent': 41}, {'text': 'POSIX_STRIDE1_STRIDE', 'fill': '#e6f3ff', 'key': 43, 'parent': 2}, {'text': '34326648760', 'fill': '#99ffbb', 'key': 44, 'parent': 43}, {'text': 'POSIX_STRIDE2_STRIDE', 'fill': '#e6f3ff', 'key': 45, 'parent': 2}, {'text': '3136', 'fill': '#99ffbb', 'key': 46, 'parent': 45}, {'text': 'POSIX_STRIDE3_STRIDE', 'fill': '#e6f3ff', 'key': 47, 'parent': 2}, {'text': '239075328', 'fill': '#99ffbb', 'key': 48, 'parent': 47}, {'text': 'POSIX_STRIDE4_STRIDE', 'fill': '#e6f3ff', 'key': 49, 'parent': 2}, {'text': '34326648432', 'fill': '#99ffbb', 'key': 50, 'parent': 49}, {'text': 'POSIX_STRIDE1_COUNT', 'fill': '#e6f3ff', 'key': 51, 'parent': 2}, {'text': '1794', 'fill': '#99ffbb', 'key': 52, 'parent': 51}, {'text': 'POSIX_STRIDE2_COUNT', 'fill': '#e6f3ff', 'key': 53, 'parent': 2}, {'text': '1750', 'fill': '#99ffbb', 'key': 54, 'parent': 53}, {'text': 'POSIX_STRIDE3_COUNT', 'fill': '#e6f3ff', 'key': 55, 'parent': 2}, {'text': '1420', 'fill': '#99ffbb', 'key': 56, 'parent': 55}, {'text': 'POSIX_STRIDE4_COUNT', 'fill': '#e6f3ff', 'key': 57, 'parent': 2}, {'text': '1372', 'fill': '#99ffbb', 'key': 58, 'parent': 57}, {'text': 'POSIX_ACCESS1_ACCESS', 'fill': '#e6f3ff', 'key': 59, 'parent': 2}, {'text': '512', 'fill': '#99ffbb', 'key': 60, 'parent': 59}, {'text': 'POSIX_ACCESS2_ACCESS', 'fill': '#e6f3ff', 'key': 61, 'parent': 2}, {'text': '1048576', 'fill': '#99ffbb', 'key': 62, 'parent': 61}, {'text': 'POSIX_ACCESS3_ACCESS', 'fill': '#e6f3ff', 'key': 63, 'parent': 2}, {'text': '4194304', 'fill': '#99ffbb', 'key': 64, 'parent': 63}, {'text': 'POSIX_ACCESS4_ACCESS', 'fill': '#e6f3ff', 'key': 65, 'parent': 2}, {'text': '8336', 'fill': '#99ffbb', 'key': 66, 'parent': 65}, {'text': 'POSIX_ACCESS1_COUNT', 'fill': '#e6f3ff', 'key': 67, 'parent': 2}, {'text': '469303296', 'fill': '#99ffbb', 'key': 68, 'parent': 67}, {'text': 'POSIX_ACCESS2_COUNT', 'fill': '#e6f3ff', 'key': 69, 'parent': 2}, {'text': '326240', 'fill': '#99ffbb', 'key': 70, 'parent': 69}, {'text': 'POSIX_ACCESS3_COUNT', 'fill': '#e6f3ff', 'key': 71, 'parent': 2}, {'text': '24552', 'fill': '#99ffbb', 'key': 72, 'parent': 71}, {'text': 'POSIX_ACCESS4_COUNT', 'fill': '#e6f3ff', 'key': 73, 'parent': 2}, {'text': '2', 'fill': '#99ffbb', 'key': 74, 'parent': 73}, {'text': 'POSIX_FASTEST_RANK', 'fill': '#e6f3ff', 'key': 75, 'parent': 2}, {'text': '239', 'fill': '#99ffbb', 'key': 76, 'parent': 75}, {'text': 'POSIX_FASTEST_RANK_BYTES', 'fill': '#e6f3ff', 'key': 77, 'parent': 2}, {'text': '335544320', 'fill': '#99ffbb', 'key': 78, 'parent': 77}, {'text': 'POSIX_SLOWEST_RANK_BYTES', 'fill': '#e6f3ff', 'key': 79, 'parent': 2}, {'text': '343937126336', 'fill': '#99ffbb', 'key': 80, 'parent': 79}, {'text': 'MPI-IO', 'fill': '#e6f3ff', 'key': 81, 'parent': 1}, {'text': 'id', 'fill': '#e6f3ff', 'key': 82, 'parent': 81}, {'text': '10691518514323380224', 'fill': '#99ffbb', 'key': 83, 'parent': 82}, {'text': 'MPIIO_COLL_OPENS', 'fill': '#e6f3ff', 'key': 84, 'parent': 81}, {'text': '1024', 'fill': '#99ffbb', 'key': 85, 'parent': 84}, {'text': 'MPIIO_INDEP_WRITES', 'fill': '#e6f3ff', 'key': 86, 'parent': 81}, {'text': '469786624', 'fill': '#99ffbb', 'key': 87, 'parent': 86}, {'text': 'MPIIO_COLL_WRITES', 'fill': '#e6f3ff', 'key': 88, 'parent': 81}, {'text': '12288', 'fill': '#99ffbb', 'key': 89, 'parent': 88}, {'text': 'MPIIO_VIEWS', 'fill': '#e6f3ff', 'key': 90, 'parent': 81}, {'text': '24576', 'fill': '#99ffbb', 'key': 91, 'parent': 90}, {'text': 'MPIIO_MODE', 'fill': '#e6f3ff', 'key': 92, 'parent': 81}, {'text': '9', 'fill': '#99ffbb', 'key': 93, 'parent': 92}, {'text': 'MPIIO_BYTES_WRITTEN', 'fill': '#e6f3ff', 'key': 94, 'parent': 81}, {'text': '687198965696', 'fill': '#99ffbb', 'key': 95, 'parent': 94}, {'text': 'MPIIO_MAX_WRITE_TIME_SIZE', 'fill': '#e6f3ff', 'key': 96, 'parent': 81}, {'text': '136', 'fill': '#99ffbb', 'key': 97, 'parent': 96}, {'text': 'MPIIO_SIZE_WRITE_AGG_0_100', 'fill': '#e6f3ff', 'key': 98, 'parent': 81}, {'text': '1030', 'fill': '#99ffbb', 'key': 99, 'parent': 98}, {'text': 'MPIIO_SIZE_WRITE_AGG_100_1K', 'fill': '#e6f3ff', 'key': 100, 'parent': 81}, {'text': '469762091', 'fill': '#99ffbb', 'key': 101, 'parent': 100}, {'text': 'MPIIO_SIZE_WRITE_AGG_1K_10K', 'fill': '#e6f3ff', 'key': 102, 'parent': 81}, {'text': '975', 'fill': '#99ffbb', 'key': 103, 'parent': 102}, {'text': 'MPIIO_SIZE_WRITE_AGG_1M_4M', 'fill': '#e6f3ff', 'key': 104, 'parent': 81}, {'text': '24576', 'fill': '#99ffbb', 'key': 105, 'parent': 104}, {'text': 'MPIIO_SIZE_WRITE_AGG_10M_100M', 'fill': '#e6f3ff', 'key': 106, 'parent': 81}, {'text': '10240', 'fill': '#99ffbb', 'key': 107, 'parent': 106}, {'text': 'MPIIO_ACCESS1_ACCESS', 'fill': '#e6f3ff', 'key': 108, 'parent': 81}, {'text': '512', 'fill': '#99ffbb', 'key': 109, 'parent': 108}, {'text': 'MPIIO_ACCESS2_ACCESS', 'fill': '#e6f3ff', 'key': 110, 'parent': 81}, {'text': '4194304', 'fill': '#99ffbb', 'key': 111, 'parent': 110}, {'text': 'MPIIO_ACCESS3_ACCESS', 'fill': '#e6f3ff', 'key': 112, 'parent': 81}, {'text': '33554432', 'fill': '#99ffbb', 'key': 113, 'parent': 112}, {'text': 'MPIIO_ACCESS4_ACCESS', 'fill': '#e6f3ff', 'key': 114, 'parent': 81}, {'text': '6272', 'fill': '#99ffbb', 'key': 115, 'parent': 114}, {'text': 'MPIIO_ACCESS1_COUNT', 'fill': '#e6f3ff', 'key': 116, 'parent': 81}, {'text': '469762048', 'fill': '#99ffbb', 'key': 117, 'parent': 116}, {'text': 'MPIIO_ACCESS2_COUNT', 'fill': '#e6f3ff', 'key': 118, 'parent': 81}, {'text': '24576', 'fill': '#99ffbb', 'key': 119, 'parent': 118}, {'text': 'MPIIO_ACCESS3_COUNT', 'fill': '#e6f3ff', 'key': 120, 'parent': 81}, {'text': '10240', 'fill': '#99ffbb', 'key': 121, 'parent': 120}, {'text': 'MPIIO_ACCESS4_COUNT', 'fill': '#e6f3ff', 'key': 122, 'parent': 81}, {'text': '489', 'fill': '#99ffbb', 'key': 123, 'parent': 122}, {'text': 'MPIIO_FASTEST_RANK', 'fill': '#e6f3ff', 'key': 124, 'parent': 81}, {'text': '239', 'fill': '#99ffbb', 'key': 125, 'parent': 124}, {'text': 'MPIIO_FASTEST_RANK_BYTES', 'fill': '#e6f3ff', 'key': 126, 'parent': 81}, {'text': '671094912', 'fill': '#99ffbb', 'key': 127, 'parent': 126}, {'text': 'MPIIO_SLOWEST_RANK', 'fill': '#e6f3ff', 'key': 128, 'parent': 81}, {'text': '2', 'fill': '#99ffbb', 'key': 129, 'parent': 128}, {'text': 'MPIIO_SLOWEST_RANK_BYTES', 'fill': '#e6f3ff', 'key': 130, 'parent': 81}, {'text': '671089224', 'fill': '#99ffbb', 'key': 131, 'parent': 130}, {'text': 'LUSTRE', 'fill': '#e6f3ff', 'key': 132, 'parent': 1}, {'text': 'id', 'fill': '#e6f3ff', 'key': 133, 'parent': 132}, {'text': '10691518514323380224', 'fill': '#99ffbb', 'key': 134, 'parent': 133}, {'text': 'LUSTRE_OSTS', 'fill': '#e6f3ff', 'key': 135, 'parent': 132}, {'text': '248', 'fill': '#99ffbb', 'key': 136, 'parent': 135}, {'text': 'LUSTRE_MDTS', 'fill': '#e6f3ff', 'key': 137, 'parent': 132}, {'text': '5', 'fill': '#99ffbb', 'key': 138, 'parent': 137}, {'text': 'LUSTRE_STRIPE_OFFSET', 'fill': '#e6f3ff', 'key': 139, 'parent': 132}, {'text': '-1', 'fill': '#99ffbb', 'key': 140, 'parent': 139}, {'text': 'LUSTRE_STRIPE_SIZE', 'fill': '#e6f3ff', 'key': 141, 'parent': 132}, {'text': '1048576', 'fill': '#99ffbb', 'key': 142, 'parent': 141}, {'text': 'LUSTRE_STRIPE_WIDTH', 'fill': '#e6f3ff', 'key': 143, 'parent': 132}, {'text': '1', 'fill': '#99ffbb', 'key': 144, 'parent': 143}, {'text': 'ost_ids', 'fill': '#e6f3ff', 'key': 145, 'parent': 132}, {'text': '[163]', 'fill': '#99ffbb', 'key': 146, 'parent': 145}, {'text': 'STDIO', 'fill': '#e6f3ff', 'key': 147, 'parent': 1}, {'text': 'id', 'fill': '#e6f3ff', 'key': 148, 'parent': 147}, {'text': '15920181672442169344', 'fill': '#99ffbb', 'key': 149, 'parent': 148}, {'text': 'STDIO_OPENS', 'fill': '#e6f3ff', 'key': 150, 'parent': 147}, {'text': '1024', 'fill': '#99ffbb', 'key': 151, 'parent': 150}, {'text': 'STDIO_WRITES', 'fill': '#e6f3ff', 'key': 152, 'parent': 147}, {'text': '46', 'fill': '#99ffbb', 'key': 153, 'parent': 152}, {'text': 'STDIO_FLUSHES', 'fill': '#e6f3ff', 'key': 154, 'parent': 147}, {'text': '7', 'fill': '#99ffbb', 'key': 155, 'parent': 154}, {'text': 'STDIO_BYTES_WRITTEN', 'fill': '#e6f3ff', 'key': 156, 'parent': 147}, {'text': '753', 'fill': '#99ffbb', 'key': 157, 'parent': 156}, {'text': 'STDIO_MAX_BYTE_WRITTEN', 'fill': '#e6f3ff', 'key': 158, 'parent': 147}, {'text': '752', 'fill': '#99ffbb', 'key': 159, 'parent': 158}, {'text': 'STDIO_FASTEST_RANK', 'fill': '#e6f3ff', 'key': 160, 'parent': 147}, {'text': '16', 'fill': '#99ffbb', 'key': 161, 'parent': 160}, {'text': 'STDIO_SLOWEST_RANK_BYTES', 'fill': '#e6f3ff', 'key': 162, 'parent': 147}, {'text': '753', 'fill': '#99ffbb', 'key': 163, 'parent': 162}]
+
+      // create the Model with data for the tree, and assign to the Diagram
+      myDiagram.model =
+        new go.TreeModel(
+          { nodeDataArray: nodeDataArray });
+    }
+
+  // Customize the TreeLayout to position all of the leaf nodes at the same vertical Y position.
+  class FlatTreeLayout extends go.TreeLayout {
+    // This assumes the TreeLayout.angle is 90 -- growing downward
+    commitLayout() {
+      super.commitLayout();  // call base method first
+      // find maximum Y position of all Nodes
+      var y = -Infinity;
+      this.network.vertexes.each(v => y = Math.max(y, v.node.position.y));
+      // move down all leaf nodes to that Y position, but keeping their X position
+      this.network.vertexes.each(v => {
+        if (v.destinationEdges.count === 0) {
+          // shift the node down to Y
+          v.node.moveTo(v.node.position.x, y);
+          // extend the last segment vertically
+          v.node.toEndSegmentLength = Math.abs(v.centerY - y);
+        } else {  // restore to normal value
+          v.node.toEndSegmentLength = 10;
+        }
+      });
+    }
+  }
+  // end FlatTreeLayout
+
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
+
+<div id="sample">
+  <div id="myDiagramDiv" style="border: 1px solid black; width: 100%; height: 500px; position: relative; -webkit-tap-highlight-color: rgba(255, 255, 255, 0); cursor: auto;"><canvas tabindex="0" width="1054" height="498" style="position: absolute; top: 0px; left: 0px; z-index: 2; user-select: none; touch-action: none; width: 1054px; height: 498px; cursor: auto;">This text is displayed if your browser does not support the Canvas HTML element.</canvas><div style="position: absolute; overflow: auto; width: 1054px; height: 498px; z-index: 1;"><div style="position: absolute; width: 1px; height: 1px;"></div></div></div>
+  <p>A <em>parse tree</em> is an ordered, rooted tree representing the structure of a sentence, broken down to parts-of-speech.</p>
+  <p>
+    This diagram uses a custom <a href="../api/symbols/TreeLayout.html" target="api">TreeLayout</a> called <b>FlatTreeLayout</b> that places all leaf nodes at the same Y position.
+    It also makes use of a <b>TreeExpanderButton</b> on the node template. See the <a href="../intro/buttons.html">Intro page on Buttons</a> for more GoJS button information.
+  </p>
+  <p>
+    The abbreviations used in this diagram are:
+    </p><ul>
+      <li><b>NP</b>, a noun phrase</li>
+      <li><b>VP</b>, a verb phrase</li>
+      <li><b>PP</b>, a prepositional phrase</li>
+      <li><b>DT</b>, a determiner</li>
+      <li><b>JJ</b>, an adjective</li>
+      <li><b>NN</b>, a common noun</li>
+      <li><b>VBZ</b>, a third person singular present verb</li>
+      <li><b>VBN</b>, a past participle verb</li>
+    </ul>
+  <p></p>
+<p class="text-xs">GoJS version 2.2.17. Copyright 1998-2022 by Northwoods Software.</p></div>
+    <p><a href="https://github.com/NorthwoodsSoftware/GoJS/blob/master/samples/parseTree.html" target="_blank">View this sample page's source on GitHub</a></p></div>
+  </body>
+  </html>
